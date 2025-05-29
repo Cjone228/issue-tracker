@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Enhanced Issue Tracker</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>Issue Tracker</h1>
+    <form id="issueForm">
+      <input type="text" id="title" placeholder="Issue Title" required />
+      <textarea id="description" placeholder="Description" required></textarea>
+      <input type="date" id="dueDate" required />
+      <select id="assignee">
+        <option value="">Assign to...</option>
+        <option value="Alice">Alice</option>
+        <option value="Bob">Bob</option>
+        <option value="Chandler">Chandler</option>
+      </select>
+      <select id="status">
+        <option value="Open">Open</option>
+        <option value="In Progress">In Progress</option>
+        <option value="Resolved">Resolved</option>
+      </select>
+      <button type="submit">Add Issue</button>
+    </form>
+
+    <div id="notification" class="hidden"></div>
+
+    <div class="filters">
+      <label>Filter by Assignee:</label>
+      <select id="filterAssignee">
+        <option value="">All</option>
+        <option value="Alice">Alice</option>
+        <option value="Bob">Bob</option>
+        <option value="Chandler">Chandler</option>
+      </select>
+    </div>
+
+    <h2>Project Timeline</h2>
+    <div class="timeline" id="timeline"></div>
+
+    <h2>All Issues</h2>
+    <div id="issuesList"></div>
+  </div>
+
+  <script>
+    const issueForm = document.getElementById('issueForm');
+    const issuesList = document.getElementById('issuesList');
+    const filterAssignee = document.getElementById('filterAssignee');
+    const timeline = document.getElementById('timeline');
+    const notification = document.getElementById('notification');
+
+    let issues = [];
+
+    function displayIssues() {
+      issuesList.innerHTML = '';
+      timeline.innerHTML = '';
+      const filtered = filterAssignee.value
+        ? issues.filter(issue => issue.assignee === filterAssignee.value)
+        : issues;
+
+      filtered.forEach((issue, index) => {
+        const issueCard = document.createElement('div');
+        issueCard.className = 'issue-card';
+
+        issueCard.innerHTML = `
+          <h3>${issue.title}</h3>
+          <p>${issue.description}</p>
+          <p><strong>Due:</strong> ${issue.dueDate}</p>
+          <p><strong>Assignee:</strong> ${issue.assignee}</p>
+          <p><strong>Status:</strong> ${issue.status}</p>
+          <button onclick="editIssue(${index})">Edit</button>
+          <button onclick="deleteIssue(${index})">Delete</button>
+        `;
+        issuesList.appendChild(issueCard);
+
+        const timelineBlock = document.createElement('div');
+        timelineBlock.className = 'timeline-block';
+        timelineBlock.textContent = `${issue.title} (${issue.status}) - ${issue.dueDate}`;
+        timeline.appendChild(timelineBlock);
+      });
+    }
+
+    function showNotification(message) {
+      notification.textContent = message;
+      notification.classList.remove('hidden');
+      setTimeout(() => notification.classList.add('hidden'), 3000);
+    }
+
+    function editIssue(index) {
+      const issue = issues[index];
+      document.getElementById('title').value = issue.title;
+      document.getElementById('description').value = issue.description;
+      document.getElementById('dueDate').value = issue.dueDate;
+      document.getElementById('assignee').value = issue.assignee;
+      document.getElementById('status').value = issue.status;
+
+      issues.splice(index, 1);
+      showNotification('Edit the fields and resubmit to save changes.');
+      displayIssues();
+    }
+
+    function deleteIssue(index) {
+      issues.splice(index, 1);
+      showNotification('Issue deleted.');
+      displayIssues();
+    }
+
+    issueForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      const title = document.getElementById('title').value;
+      const description = document.getElementById('description').value;
+      const dueDate = document.getElementById('dueDate').value;
+      const assignee = document.getElementById('assignee').value;
+      const status = document.getElementById('status').value;
+
+      issues.push({ title, description, dueDate, assignee, status });
+      issueForm.reset();
+      showNotification('Issue added.');
+      displayIssues();
+    });
+
+    filterAssignee.addEventListener('change', displayIssues);
+  </script>
+</body>
+</html>
