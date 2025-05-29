@@ -14,7 +14,7 @@ This is a web-based issue tracking tool built using HTML, CSS, and JavaScript.
 [Click here to view the project](https://your-username.github.io/issue-tracker/)
 
 ## 🛠️ How to Run Locally
-1. Download the ZIP or clone the repository.
+1. Download the ZIP
 2. Open `index.html` in your browser.
 
 ## 📌 Notes
