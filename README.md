@@ -11,7 +11,7 @@ This is a web-based issue tracking tool built using HTML, CSS, and JavaScript.
 - Clean, user-friendly design with animations
 
 ## 🚀 Live Demo
-[Click here to view the project](https://your-username.github.io/issue-tracker/)
+[Click here to view the project](file:///C:/Users/crjon/OneDrive/Desktop/DFT%20project/index.html)
 
 ## 🛠️ How to Run Locally
 1. Download the ZIP
